@@ -1,4 +1,4 @@
-package com.example.getthefuckapp;
+package hackcu.ani300.getthefuckapp;
 
 
 import android.app.Dialog;
