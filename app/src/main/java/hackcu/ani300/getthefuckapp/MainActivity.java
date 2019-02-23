@@ -4,8 +4,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.getthefuckapp.R;
 import com.spotify.android.appremote.api.ConnectionParams;
@@ -80,5 +82,11 @@ public class MainActivity extends AppCompatActivity {
         String timeMessage = hourString + ":" + minuteString;
         TextView alarmTime = findViewById(R.id.alarmTime);
         alarmTime.setText(timeMessage);
+    }
+
+    public void setMix(View view) {
+        Toast toast = Toast.makeText(this, R.string.Mix_Chosen, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 }
