@@ -16,7 +16,7 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 public class MainActivity extends AppCompatActivity {
 
     private static final String CLIENT_ID = "4386dbf0a1a44da58fe44ee7119859f4";
-    private static final String REDIRECT_URI = "http://com.yourdomain.yourapp/callback";
+    private static final String REDIRECT_URI = "getthefuckapp://callback";
     private SpotifyAppRemote mSpotifyAppRemote;
 
     @Override
