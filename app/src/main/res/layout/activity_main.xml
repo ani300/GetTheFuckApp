@@ -105,4 +105,14 @@
         app:layout_constraintTop_toBottomOf="@+id/blue_button"
         app:layout_constraintVertical_bias="0.20999998" />
 
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/green_button" />
+
 </android.support.constraint.ConstraintLayout>

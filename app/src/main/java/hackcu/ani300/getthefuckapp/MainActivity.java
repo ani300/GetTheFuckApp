@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private String mHappyDaySong;
 
     private Map<String, Integer> mStartingTimes;
+    Button cancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,6 +251,13 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent annoyingPendingIntent = PendingIntent.getBroadcast(this, 2, annoyingIntent, 0);
         manager.setExact(AlarmManager.RTC_WAKEUP, calAnnoyingAlarm.getTimeInMillis(), annoyingPendingIntent);
 
+        cancelButton = (Button) findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                manager.cancel(soothingPendingIntent);
+                manager.cancel(happyPendingIntent);
+                manager.cancel(annoyingPendingIntent);
+            }});
     }
 
     public void setMix(View view) {
