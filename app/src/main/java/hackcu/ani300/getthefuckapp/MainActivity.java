@@ -13,6 +13,9 @@ import com.example.getthefuckapp.R;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
+import com.spotify.protocol.types.Track;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String CLIENT_ID = "4386dbf0a1a44da58fe44ee7119859f4";
     private static final String REDIRECT_URI = "getthefuckapp://callback";
     private SpotifyAppRemote mSpotifyAppRemote;
+
+    private ArrayList<String> mSoothingList;
+    private ArrayList<String> mHappyDayList;
+    private ArrayList<String> mAnnoyingList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +70,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void connected() {
         // Then we will write some more code here.
+        // Play a playlist
+        mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+
+        // Subscribe to PlayerState
+        mSpotifyAppRemote.getPlayerApi()
+                .subscribeToPlayerState()
+                .setEventCallback(playerState -> {
+                    final Track track = playerState.track;
+                    if (track != null) {
+                        Log.d("MainActivity", track.name + " by " + track.artist.name);
+                    }
+                });
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         // Aaand we will finish off here.
+        super.onStop();
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
     }
 
     public void setAlarmTime(View view) {
