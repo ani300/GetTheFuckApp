@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setMix(View view) {
         Toast toast = Toast.makeText(this, R.string.Mix_Chosen, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.CENTER, 0, 150);
         toast.show();
     }
 }
