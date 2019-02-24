@@ -26,6 +26,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -48,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mSoothingList;
     private ArrayList<String> mHappyDayList;
     private ArrayList<String> mAnnoyingList;
+
+    private String mSoothingSong;
+    private String mAnnoyingSong;
+    private String mHappyDaySong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,17 +81,17 @@ public class MainActivity extends AppCompatActivity {
     private void connected() {
         // Then we will write some more code here.
         // Play a playlist
-        mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
+        //mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:37i9dQZF1DX2sUQwD7tbmL");
 
         // Subscribe to PlayerState
-        mSpotifyAppRemote.getPlayerApi()
-                .subscribeToPlayerState()
-                .setEventCallback(playerState -> {
-                    final Track track = playerState.track;
-                    if (track != null) {
-                        Log.d("MainActivity", track.name + " by " + track.artist.name);
-                    }
-                });
+        //mSpotifyAppRemote.getPlayerApi()
+        //        .subscribeToPlayerState()
+        //        .setEventCallback(playerState -> {
+        //            final Track track = playerState.track;
+        //            if (track != null) {
+        //                Log.d("MainActivity", track.name + " by " + track.artist.name);
+        //            }
+        //        });
     }
 
     @Override
@@ -170,6 +175,13 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, R.string.Mix_Chosen, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 150);
         toast.show();
+
+        Integer seed = Integer.valueOf(view.getTag().toString());
+
+        Random rand = new Random(seed);
+        mSoothingSong = mSoothingList.get(rand.nextInt(mSoothingList.size()));
+        mAnnoyingSong = mAnnoyingList.get(rand.nextInt(mAnnoyingList.size()));
+        mHappyDaySong = mHappyDayList.get(rand.nextInt(mHappyDayList.size()));
     }
 
     public void addSongsToList(JsonArray songList, List<String> list) {
