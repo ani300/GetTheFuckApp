@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name="hackcu.ani300.getthefuckapp.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
         <activity android:name="hackcu.ani300.getthefuckapp.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,16 +24,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with "getthefuckapp://callback” -->
-                <data android:scheme="getthefuckapp"
-                    android:host="callback" />
+                <data
+                    android:host="callback"
+                    android:scheme="getthefuckapp" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="com.spotify.sdk.android.authentication.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="hackcu.ani300.getthefuckapp.AlarmReceiver" />
-
     </application>
 
 </manifest>

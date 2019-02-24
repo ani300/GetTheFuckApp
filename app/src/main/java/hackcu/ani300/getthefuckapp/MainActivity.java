@@ -1,6 +1,7 @@
 package hackcu.ani300.getthefuckapp;
 
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.app.PendingIntent;
@@ -59,8 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private String mSoothingSong;
     private String mAnnoyingSong;
     private String mHappyDaySong;
-
-    PendingIntent pendingIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,11 +178,8 @@ public class MainActivity extends AppCompatActivity {
         alarmTime.setText(timeMessage);
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Date dat = new Date();
         Calendar cal_alarm = Calendar.getInstance();
         Calendar cal_now = Calendar.getInstance();
-        cal_now.setTime(dat);
-        cal_alarm.setTime(dat);
         cal_alarm.set(Calendar.HOUR_OF_DAY, hour);
         cal_alarm.set(Calendar.MINUTE,minute);
         cal_alarm.set(Calendar.SECOND,0);
@@ -192,9 +188,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent myIntent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        manager.set(AlarmManager.RTC_WAKEUP,cal_alarm.getTimeInMillis(), pendingIntent);
+        manager.set(AlarmManager.RTC_WAKEUP, cal_alarm.getTimeInMillis(), pendingIntent);
     }
 
     public void setMix(View view) {
