@@ -257,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 manager.cancel(soothingPendingIntent);
                 manager.cancel(happyPendingIntent);
                 manager.cancel(annoyingPendingIntent);
+                mSpotifyAppRemote.getPlayerApi().pause();
             }});
     }
 
