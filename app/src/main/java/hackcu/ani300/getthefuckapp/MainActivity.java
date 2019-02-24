@@ -16,10 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.getthefuckapp.R;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -29,11 +31,16 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import okhttp3.Call;
@@ -62,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private String mAnnoyingSong;
     private String mHappyDaySong;
 
+    private Map<String, Integer> mStartingTimes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +84,28 @@ public class MainActivity extends AppCompatActivity {
         mSoothingList = new ArrayList<>();
         mHappyDayList = new ArrayList<>();
         mAnnoyingList = new ArrayList<>();
+        mStartingTimes = new HashMap<>();
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<Map<String, String>>(){}.getType();
+        String json = null;
+        try {
+            InputStream is = this.getAssets().open("gtfAPP.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        JsonParser parser = new JsonParser();
+        JsonElement rootNode = parser.parse(json);
+        JsonArray startingTimesJson = rootNode.getAsJsonArray();
+        for (JsonElement song : startingTimesJson) {
+            JsonObject jsonSong = song.getAsJsonObject();
+            mStartingTimes.put(jsonSong.get("URI").getAsString(), jsonSong.get("ms").getAsInt());
+        }
 
         // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
         AuthenticationRequest.Builder builder =
@@ -181,19 +212,43 @@ public class MainActivity extends AppCompatActivity {
         alarmTime.setText(timeMessage);
 
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Calendar cal_alarm = Calendar.getInstance();
-        Calendar cal_now = Calendar.getInstance();
-        cal_alarm.set(Calendar.HOUR_OF_DAY, hour);
-        cal_alarm.set(Calendar.MINUTE,minute);
-        cal_alarm.set(Calendar.SECOND,0);
-        if(cal_alarm.before(cal_now)){
-            cal_alarm.add(Calendar.DATE,1);
+
+        Calendar calAlarm = Calendar.getInstance();
+        Calendar calNow = Calendar.getInstance();
+        calAlarm.set(Calendar.HOUR_OF_DAY, hour);
+        calAlarm.set(Calendar.MINUTE, minute);
+        calAlarm.set(Calendar.SECOND, 0);
+        if (calAlarm.before(calNow)) {
+            calAlarm.add(Calendar.DATE,1);
         }
 
-        Intent myIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calSoothingAlarm = (Calendar)calAlarm.clone();
+        calSoothingAlarm.add(Calendar.SECOND, -30);
 
-        manager.set(AlarmManager.RTC_WAKEUP, cal_alarm.getTimeInMillis(), pendingIntent);
+        Calendar calAnnoyingAlarm = (Calendar)calAlarm.clone();
+        calAnnoyingAlarm.add(Calendar.SECOND, 30);
+
+        Intent soothingIntent = new Intent(this, AlarmReceiver.class);
+        soothingIntent.putExtra("song", mSoothingSong); //data to pass
+        soothingIntent.putExtra("starting_time", mStartingTimes.getOrDefault(mSoothingSong, 0));
+        soothingIntent.putExtra("spotify_token", mSpotifyToken);
+        PendingIntent soothingPendingIntent = PendingIntent.getBroadcast(this, 0, soothingIntent, 0);
+        manager.setExact(AlarmManager.RTC_WAKEUP, calSoothingAlarm.getTimeInMillis(), soothingPendingIntent);
+
+        Intent happyIntent = new Intent(this, AlarmReceiver.class);
+        happyIntent.putExtra("song", mHappyDaySong); //data to pass
+        happyIntent.putExtra("starting_time", mStartingTimes.getOrDefault(mHappyDaySong, 0));
+        happyIntent.putExtra("spotify_token", mSpotifyToken);
+        PendingIntent happyPendingIntent = PendingIntent.getBroadcast(this, 1, happyIntent, 0);
+        manager.setExact(AlarmManager.RTC_WAKEUP, calAlarm.getTimeInMillis(), happyPendingIntent);
+
+        Intent annoyingIntent = new Intent(this, AlarmReceiver.class);
+        annoyingIntent.putExtra("song", mAnnoyingSong); //data to pass
+        annoyingIntent.putExtra("starting_time", mStartingTimes.getOrDefault(mAnnoyingSong, 0));
+        annoyingIntent.putExtra("spotify_token", mSpotifyToken);
+        PendingIntent annoyingPendingIntent = PendingIntent.getBroadcast(this, 2, annoyingIntent, 0);
+        manager.setExact(AlarmManager.RTC_WAKEUP, calAnnoyingAlarm.getTimeInMillis(), annoyingPendingIntent);
+
     }
 
     public void setMix(View view) {
