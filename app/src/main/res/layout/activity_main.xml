@@ -29,6 +29,7 @@
         android:layout_marginBottom="8dp"
         android:background="@android:color/holo_red_dark"
         android:onClick="setMix"
+        android:tag="1"
         android:text="@string/red_button"
         android:textAlignment="center"
         android:textColor="@android:color/black"
@@ -59,7 +60,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alarmTime"
         app:layout_constraintVertical_bias="0.25"
-        android:onClick="setMix" />
+        android:onClick="setMix"
+        android:tag="2" />
 
     <Button
         android:id="@+id/yellow_button"
@@ -78,7 +80,8 @@
         app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alarmTime"
-        android:onClick="setMix" />
+        android:onClick="setMix"
+        android:tag="3"/>
 
     <Button
         android:id="@+id/green_button"
@@ -97,6 +100,7 @@
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alarmTime"
-        android:onClick="setMix" />
+        android:onClick="setMix"
+        android:tag="4" />
 
 </android.support.constraint.ConstraintLayout>

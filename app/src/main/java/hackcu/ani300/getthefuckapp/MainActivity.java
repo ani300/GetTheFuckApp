@@ -115,7 +115,9 @@ public class MainActivity extends AppCompatActivity {
         toast.setGravity(Gravity.CENTER, 0, 150);
         toast.show();
 
-        Random rand = new Random();
+        Integer seed = (Integer)view.getTag();
+
+        Random rand = new Random(seed);
         mSoothingSong = mSoothingList.get(rand.nextInt(mSoothingList.size()));
         mAnnoyingSong = mAnnoyingList.get(rand.nextInt(mAnnoyingList.size()));
         mHappyDaySong = mHappyDayList.get(rand.nextInt(mHappyDayList.size()));
