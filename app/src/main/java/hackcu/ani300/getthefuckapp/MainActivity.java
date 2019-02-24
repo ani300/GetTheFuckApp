@@ -173,8 +173,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void processTimePickerResult(int hour, int minute) {
-        String hourString = Integer.toString(hour);
-        String minuteString = Integer.toString(minute);
+        //String hourString = Integer.toString(hour);
+        String hourString = String.format("%02d", hour);
+        //String minuteString = Integer.toString(minute);
+        String minuteString = String.format("%02d", minute);
         String timeMessage = hourString + ":" + minuteString;
         TextView alarmTime = findViewById(R.id.alarmTime);
         alarmTime.setText(timeMessage);
