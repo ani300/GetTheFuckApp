@@ -29,6 +29,7 @@ import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -171,8 +172,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void processTimePickerResult(int hour, int minute) {
-        String hourString = Integer.toString(hour);
-        String minuteString = Integer.toString(minute);
+        //String hourString = Integer.toString(hour);
+        String hourString = String.format("%02d", hour);
+        //String minuteString = Integer.toString(minute);
+        String minuteString = String.format("%02d", minute);
         String timeMessage = hourString + ":" + minuteString;
         TextView alarmTime = findViewById(R.id.alarmTime);
         alarmTime.setText(timeMessage);
@@ -200,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
         Integer seed = Integer.valueOf(view.getTag().toString());
 
-        Random rand = new Random(seed);
+        Random rand = new Random(seed + System.currentTimeMillis());
         mSoothingSong = mSoothingList.get(rand.nextInt(mSoothingList.size()));
         mAnnoyingSong = mAnnoyingList.get(rand.nextInt(mAnnoyingList.size()));
         mHappyDaySong = mHappyDayList.get(rand.nextInt(mHappyDayList.size()));
