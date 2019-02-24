@@ -16,6 +16,7 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 import com.spotify.protocol.types.Track;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mSoothingList;
     private ArrayList<String> mHappyDayList;
     private ArrayList<String> mAnnoyingList;
+
+    private String mSoothingSong;
+    private String mAnnoyingSong;
+    private String mHappyDaySong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,5 +114,10 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, R.string.Mix_Chosen, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 150);
         toast.show();
+
+        Random rand = new Random();
+        mSoothingSong = mSoothingList.get(rand.nextInt(mSoothingList.size()));
+        mAnnoyingSong = mAnnoyingList.get(rand.nextInt(mAnnoyingList.size()));
+        mHappyDaySong = mHappyDayList.get(rand.nextInt(mHappyDayList.size()));
     }
 }
